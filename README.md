@@ -2,6 +2,8 @@
 
 ![settings](.Documentation/images/settings.png)
 
+Add gRPC code auto generation for plugins.
+
 Do you want to integrate [protobuf](https://github.com/google/protobuf) as a data class, game saves, message to the server, etc. in your game? Now you can put those `.proto` files directly in the project, work on it, and have the editor script in here generate the classes for you.
 
 # Installation 
