@@ -10,6 +10,9 @@ namespace E7.Protobuf
         internal static readonly string prefProtocExecutable = "ProtobufUnity_ProtocExecutable";
         internal static readonly string prefLogError = "ProtobufUnity_LogError";
         internal static readonly string prefLogStandard = "ProtobufUnity_LogStandard";
+        public static readonly string prefGRPCPlugin = "ProtobufUnity_GRPCPluginExecutable";
+        public static readonly string prefGRPCEnable = "GRPCUnity_Enable";
+
         internal static bool enabled
         {
             get
@@ -73,6 +76,33 @@ namespace E7.Protobuf
             }
         }
 
+        internal static bool enabledGRPC
+        {
+            get
+            {
+                return EditorPrefs.GetBool(prefGRPCEnable, true);
+            }
+            set
+            {
+                EditorPrefs.SetBool(prefGRPCEnable, value);
+            }
+        }
+        public static string rawGRPCPath
+        {
+            get
+            {
+                string ret = EditorPrefs.GetString(prefGRPCPlugin, "");
+                if (ret.StartsWith(".."))
+                    return Path.Combine(Application.dataPath, ret);
+                else
+                    return ret;
+            }
+            set
+            {
+                EditorPrefs.SetString(prefGRPCPlugin, value);
+            }
+        }
+
 #if UNITY_2018_3_OR_NEWER
         internal class ProtobufUnitySettingsProvider : SettingsProvider
         {
@@ -108,6 +138,18 @@ namespace E7.Protobuf
             EditorGUILayout.LabelField("Path to protoc", GUILayout.Width(100));
             rawExcPath = EditorGUILayout.TextField(rawExcPath, GUILayout.ExpandWidth(true));
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            enabledGRPC = EditorGUILayout.Toggle(new GUIContent("Enable gRPC Compilation", ""), enabledGRPC);
+            EditorGUI.BeginDisabledGroup(!enabledGRPC);
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Path to gRPC plugins", GUILayout.Width(100));
+            rawGRPCPath = EditorGUILayout.TextField(rawGRPCPath, GUILayout.ExpandWidth(true));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUI.EndDisabledGroup();
 
             EditorGUILayout.Space();
 

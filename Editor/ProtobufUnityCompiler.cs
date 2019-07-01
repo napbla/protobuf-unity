@@ -111,6 +111,10 @@ namespace E7.Protobuf
                 string outputPath = Path.GetDirectoryName(protoFileSystemPath);
 
                 string options = " --csharp_out \"{0}\" ";
+                if (ProtoPrefs.enabledGRPC) 
+                {
+                    options += "--grpc_out \"{0}\"  --plugin=protoc-gen-grpc=" + ProtoPrefs.rawGRPCPath;
+                }
                 foreach (string s in includePaths)
                 {
                     options += string.Format(" --proto_path \"{0}\" ", s);
